@@ -29,7 +29,9 @@
 //      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
-//
+//   
+//   Valentin Dolcescu
+//  
 // ***************************************************************************
 // ***************************************************************************
 

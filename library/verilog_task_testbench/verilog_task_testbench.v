@@ -43,4 +43,38 @@ module verilog_task_testbench (
   output   [11:0]  triangle_wave
 );
 
+parameter clk_period=4095;
+reg [11:0] counter = 0;
+reg direction = 1'b1;
+
+  always @(posedge ref_clk) begin
+  if(!rstn)
+    begin
+       
+      counter <= 0;
+    end
+     else if (direction) begin
+        if (counter == clk_period) begin
+          direction <= 0; 
+        end
+        else 
+          begin
+        counter <= counter + 1; 
+      end 
+    end
+    else 
+      begin
+      if(counter == 0)
+      begin
+        direction <=1;
+      end  
+      else
+        begin
+          counter <= counter - 1;
+        end
+      end
+    end
+  
+  assign triangle_wave = counter;
+
 endmodule
