@@ -1,0 +1,7 @@
+#!/bin/bash
+
+SOURCE="$0.v"
+SOURCE+=" verilog_task_testbench.v"
+
+cd `dirname $0`
+source ../common/tb/run_tb.sh
