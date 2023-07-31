@@ -43,10 +43,10 @@ module axi_pwm_custom_if_tb;
 
   reg           resetn_in        = 1'b0;
   reg           pwm_clk          = 1'b0;
-  reg   [11:0]  data_channel_0   = 12'b0;
-  reg   [11:0]  data_channel_1   = 12'b0;
-  reg   [11:0]  data_channel_2   = 12'b0;
-  reg   [11:0]  data_channel_3   = 12'b0;
+  reg   [11:0]  data_channel_0   = 12'h0;
+  reg   [11:0]  data_channel_1   = 12'h0;
+  reg   [11:0]  data_channel_2   = 12'h0;
+  reg   [11:0]  data_channel_3   = 12'h0;
   reg   [11:0]  pulse_period_cnt = 12'h0;
   reg   [11:0]  pulse_period_d   = 12'd4096;
 
@@ -69,22 +69,39 @@ module axi_pwm_custom_if_tb;
   // generates a sawtooth signal which increments once at 4096 clock periods to test the functionality 
 
   always @(posedge pwm_clk) begin 
-    if(data_channel_1 == 12'hFFF) begin 
+
+    if(data_channel_0 >= 12'hFFF) begin 
       data_channel_0 <= 12'b0;
-      data_channel_1 <= 12'b0;
-      data_channel_2 <= 12'b0;
-      data_channel_3 <= 12'b0;
     end else if(end_of_period == 1'b1) begin 
-      data_channel_0 <= data_channel_0 + 12'h1;
-      data_channel_1 <= data_channel_1 + 12'h1;
-      data_channel_2 <= data_channel_2 + 12'h1;
-      data_channel_3 <= data_channel_3 + 12'h1;  
+      data_channel_0 <= data_channel_0 + 12'hf;  
     end else begin
       data_channel_0 <= data_channel_0;
+    end
+
+    if(data_channel_1 >= 12'hFFF) begin 
+      data_channel_1 <= 12'b0;
+    end else if(end_of_period == 1'b1) begin 
+      data_channel_1 <= data_channel_1 + 12'hf;  
+    end else begin
       data_channel_1 <= data_channel_1;
+    end
+
+    if(data_channel_2 >= 12'hFFF) begin 
+      data_channel_2 <= 12'b0;
+    end else if(end_of_period == 1'b1) begin 
+      data_channel_2 <= data_channel_2 + 12'hf;  
+    end else begin
       data_channel_2 <= data_channel_2;
+    end
+
+    if(data_channel_3 >= 12'hFFF) begin 
+      data_channel_3 <= 12'b0;
+    end else if(end_of_period == 1'b1) begin 
+      data_channel_3 <= data_channel_3 + 12'hf;  
+    end else begin
       data_channel_3 <= data_channel_3;
     end
+
   end
 
   assign end_of_period =(pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
