@@ -37,6 +37,10 @@
 
 module axi_pwm_custom #(
   parameter       ID = 0,
+  parameter       FPGA_TECHNOLOGY = 0,
+  parameter       FPGA_FAMILY = 0,
+  parameter       SPEED_GRADE = 0,
+  parameter       DEV_PACKAGE = 0
 ) (
   
 // 1.Create the pwm output signals 
@@ -383,7 +387,6 @@ module axi_pwm_custom #(
     .pwm_led_0(pwm_led_0),
     .pwm_led_1(pwm_led_1),
     .pwm_led_2(pwm_led_2),
-    .pwm_led_3(pwm_led_3),
-    );
+    .pwm_led_3(pwm_led_3));
 
 endmodule
