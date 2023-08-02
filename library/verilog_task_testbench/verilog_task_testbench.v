@@ -43,4 +43,33 @@ module verilog_task_testbench (
   output   [11:0]  triangle_wave
 );
 
+  reg [11:0] counter = 12'd0;
+  reg flag_down = 1'b0;
+
+
+  always @(posedge ref_clk)
+  begin
+    if (rstn == 1'b0)
+      counter <= 12'b000000000000;
+    else
+    begin
+      if (flag_down ==  1'b0)
+      begin
+        if (counter == 12'b111111111111)
+          flag_down <= !flag_down;
+        else
+          counter <= counter + 1'b1;
+      end
+    else
+      begin
+        if (counter == 12'b000000000000)
+          flag_down <= !flag_down;
+        else
+          counter <= counter - 1'b1;
+      end
+    end
+  end
+
+  assign triangle_wave = counter;
+
 endmodule
