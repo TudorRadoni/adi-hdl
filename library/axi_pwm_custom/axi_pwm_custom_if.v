@@ -54,6 +54,23 @@ module axi_pwm_custom_if (
 
   // internal registers
 
+  reg [11:0] counter;
+  initial counter = 12'h000;
+
+  reg aux_pwm_led_0 = 0;
+  reg aux_pwm_led_1 = 0;
+  reg aux_pwm_led_2 = 0;
+  reg aux_pwm_led_3 = 0;
+
+  reg [11:0] aux_data_channel_0;
+  reg [11:0] aux_data_channel_1;
+  reg [11:0] aux_data_channel_2;
+  reg [11:0] aux_data_channel_3;
+
+  initial aux_data_channel_0 = data_channel_0;
+  initial aux_data_channel_1 = data_channel_1;
+  initial aux_data_channel_2 = data_channel_2;
+  initial aux_data_channel_3 = data_channel_3;
 
   // internal wires
 
@@ -62,29 +79,63 @@ module axi_pwm_custom_if (
 
 // generate a signal named end_of_period witch has '1' logic value at the end of the signal period
 
-  assign end_of_period = (/*condition here*/) ? 1'b1 : 1'b0;
+  assign end_of_period = (counter == PULSE_PERIOD) ? 1'b1 : 1'b0;
 
 // Create a counter from 0 to PULSE_PERIOD
 
   always @(posedge pwm_clk) begin
-   
+    counter <= counter + 1'b1;
   end
 
 // control the pwm signal value based on the input signal and counter value
 
   always @(posedge pwm_clk) begin
-    
+      if(aux_data_channel_0 >= counter) begin
+        aux_pwm_led_0 <= 1;
+      end
+      else begin
+        aux_pwm_led_0 <= 0;
+      end
+      if(aux_data_channel_1 >= counter) begin
+        aux_pwm_led_1 <= 1;
+      end
+      else begin
+        aux_pwm_led_1 <= 0;
+      end
+      if(aux_data_channel_2 >= counter) begin
+        aux_pwm_led_2 <= 1;
+      end
+      else begin
+        aux_pwm_led_2 <= 0;
+      end
+      if(aux_data_channel_3 >= counter) begin
+        aux_pwm_led_3 <= 1;
+      end
+      else begin
+        aux_pwm_led_3 <= 0;
+      end
   end  
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
   always @(posedge pwm_clk) begin
-  
     if (end_of_period) begin
-  
+      aux_data_channel_0 <= data_channel_0;
+      aux_data_channel_1 <= data_channel_1;
+      aux_data_channel_2 <= data_channel_2;
+      aux_data_channel_3 <= data_channel_3;
+      
     end else begin
-  
+      aux_data_channel_0 <= aux_data_channel_0;
+      aux_data_channel_1 <= aux_data_channel_1;
+      aux_data_channel_2 <= aux_data_channel_2;
+      aux_data_channel_3 <= aux_data_channel_3;
     end 
   end
+
+  assign pwm_led_0 = aux_pwm_led_0;
+  assign pwm_led_1 = aux_pwm_led_1;
+  assign pwm_led_2 = aux_pwm_led_2;
+  assign pwm_led_3 = aux_pwm_led_3;
 
 endmodule
