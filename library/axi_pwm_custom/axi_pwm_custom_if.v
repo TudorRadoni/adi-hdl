@@ -36,55 +36,85 @@
 
 `timescale 1ns/100ps
 
-module axi_pwm_custom_if ( 
+module axi_pwm_custom_if (
 
-  input            pwm_clk,
-  input            rstn,
-  input    [11:0]  data_channel_0,
-  input    [11:0]  data_channel_1,
-  input    [11:0]  data_channel_2,
-  input    [11:0]  data_channel_3,
-  output           pwm_led_0,
-  output           pwm_led_1,
-  output           pwm_led_2,
-  output           pwm_led_3
-);
+    input            pwm_clk,
+    input            rstn,
+    input    [11:0]  data_channel_0,
+    input    [11:0]  data_channel_1,
+    input    [11:0]  data_channel_2,
+    input    [11:0]  data_channel_3,
+    output           pwm_led_0,
+    output           pwm_led_1,
+    output           pwm_led_2,
+    output           pwm_led_3
+  );
 
   localparam PULSE_PERIOD = 4095;
 
   // internal registers
 
+  reg     [11:0] counter;
+  initial counter = 12'h000;
 
+  reg aux_pwm_led_0 = 0;
+  reg aux_pwm_led_1 = 0;
+  reg aux_pwm_led_2 = 0;
+  reg aux_pwm_led_3 = 0;
+
+  reg       [11:0]  aux_data_channel_0 = 0'h000;
+  reg       [11:0]  aux_data_channel_1 = 0'h000;
+  reg       [11:0]  aux_data_channel_2 = 0'h000;
+  reg       [11:0]  aux_data_channel_3 = 0'h000;
   // internal wires
 
-  wire           end_of_period;  
+  wire           end_of_period;
 
 
-// generate a signal named end_of_period witch has '1' logic value at the end of the signal period
+  // generate a signal named end_of_period witch has '1' logic value at the end of the signal period
 
-  assign end_of_period = (/*condition here*/) ? 1'b1 : 1'b0;
+  assign end_of_period = (counter == PULSE_PERIOD) ? 1'b1 : 1'b0;
 
-// Create a counter from 0 to PULSE_PERIOD
+  // Create a counter from 0 to PULSE_PERIOD
 
-  always @(posedge pwm_clk) begin
-   
+  always @(posedge pwm_clk)
+  begin
+    counter <= counter + 1'b1;
   end
 
-// control the pwm signal value based on the input signal and counter value
+  // control the pwm signal value based on the input signal and counter value
 
-  always @(posedge pwm_clk) begin
-    
-  end  
-
-// make sure that the new data is processed only after the END_OF_PERIOD
-
-  always @(posedge pwm_clk) begin
-  
-    if (end_of_period) begin
-  
-    end else begin
-  
-    end 
+  always @(posedge pwm_clk)
+  begin
+    aux_pwm_led_0 <= (aux_data_channel_0 >= counter) ? 1'b1 : 1'b0;
+    aux_pwm_led_1 <= (aux_data_channel_1 >= counter) ? 1'b1 : 1'b0;
+    aux_pwm_led_2 <= (aux_data_channel_2 >= counter) ? 1'b1 : 1'b0;
+    aux_pwm_led_3 <= (aux_data_channel_3 >= counter) ? 1'b1 : 1'b0;
   end
+
+  // make sure that the new data is processed only after the END_OF_PERIOD
+
+  always @(posedge pwm_clk)
+  begin
+    if (end_of_period)
+    begin
+      aux_data_channel_0 <= data_channel_0;
+      aux_data_channel_1 <= data_channel_1;
+      aux_data_channel_2 <= data_channel_2;
+      aux_data_channel_3 <= data_channel_3;
+    end
+    else
+    begin
+      aux_data_channel_0 <= aux_data_channel_0;
+      aux_data_channel_1 <= aux_data_channel_1;
+      aux_data_channel_2 <= aux_data_channel_2;
+      aux_data_channel_3 <= aux_data_channel_3;
+    end
+  end
+
+  assign pwm_led_0 = aux_pwm_led_0;
+  assign pwm_led_1 = aux_pwm_led_1;
+  assign pwm_led_2 = aux_pwm_led_2;
+  assign pwm_led_3 = aux_pwm_led_3;
 
 endmodule
