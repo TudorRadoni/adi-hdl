@@ -38,23 +38,26 @@
 module axi_pwm_custom_if_tb;
   parameter VCD_FILE = "axi_pwm_custom_if_tb.vcd";
 
-  `define TIMEOUT 9000
+  `define TIMEOUT 35000
   `include "../common/tb/tb_base.v"
 
   reg           resetn_in        = 1'b0;
   reg           pwm_clk          = 1'b0;
-  reg   [11:0]  data_channel_0   = 12'b0;
-  reg   [11:0]  data_channel_1   = 12'b0;
-  reg   [11:0]  data_channel_2   = 12'b0;
-  reg   [11:0]  data_channel_3   = 12'b0;
+  reg   [11:0]  data_channel_0   = 12'd1024;
+  reg   [11:0]  data_channel_1   = 12'd2048;
+  reg   [11:0]  data_channel_2   = 12'd4095;
+  reg   [11:0]  data_channel_3   = 12'd500;
   reg   [11:0]  pulse_period_cnt = 12'h0;
-  reg   [11:0]  pulse_period_d   = 12'd4096;
+  reg   [11:0]  pulse_period_d   = 12'd4095;
 
-  wire          end_of_period;  
+  reg           inc_rate         = 1'b1; // 0 = full period, 1 = half period
+
+  wire          end_of_period;
+  wire          inc_signal;
   wire          pwm_led_0; 
   wire          pwm_led_1;
   wire          pwm_led_2; 
-  wire          pwm_led_3; 
+  wire          pwm_led_3;
 
   // generates the reference clock signal 
 
@@ -74,11 +77,11 @@ module axi_pwm_custom_if_tb;
       data_channel_1 <= 12'b0;
       data_channel_2 <= 12'b0;
       data_channel_3 <= 12'b0;
-    end else if(end_of_period == 1'b1) begin 
-      data_channel_0 <= data_channel_0 + 12'h1;
-      data_channel_1 <= data_channel_1 + 12'h1;
-      data_channel_2 <= data_channel_2 + 12'h1;
-      data_channel_3 <= data_channel_3 + 12'h1;  
+    end else if(inc_signal == 1'b1) begin 
+      data_channel_0 <= data_channel_0 + 12'd500;
+      data_channel_1 <= data_channel_1 + 12'd200;
+      data_channel_2 <= data_channel_2 + 12'd200;
+      data_channel_3 <= data_channel_3 + 12'd200;  
     end else begin
       data_channel_0 <= data_channel_0;
       data_channel_1 <= data_channel_1;
@@ -87,7 +90,8 @@ module axi_pwm_custom_if_tb;
     end
   end
 
-  assign end_of_period =(pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
+  assign end_of_period = (pulse_period_cnt == pulse_period_d);
+  assign inc_signal = (pulse_period_cnt == (pulse_period_d >> inc_rate));
 
   always @(posedge pwm_clk) begin
     if(end_of_period == 1'b1) begin
@@ -109,6 +113,6 @@ module axi_pwm_custom_if_tb;
     .pwm_led_0(pwm_led_0),
     .pwm_led_1(pwm_led_1),
     .pwm_led_2(pwm_led_2),
-    .pwm_led_3 (pwm_led_3));
+    .pwm_led_3(pwm_led_3));
 
 endmodule

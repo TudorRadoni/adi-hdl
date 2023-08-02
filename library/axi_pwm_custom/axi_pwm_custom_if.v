@@ -54,36 +54,66 @@ module axi_pwm_custom_if (
 
   // internal registers
 
+  reg   [11:0]  pulse_period_cnt = 12'h0;
+  reg           pwm_led_0_reg    = 1'b0;
+  reg           pwm_led_1_reg    = 1'b0;
+  reg           pwm_led_2_reg    = 1'b0;
+  reg           pwm_led_3_reg    = 1'b0;
+  reg   [11:0]  data_channel_0_reg = 12'h000;
+  reg   [11:0]  data_channel_1_reg = 12'h000;
+  reg   [11:0]  data_channel_2_reg = 12'h000;
+  reg   [11:0]  data_channel_3_reg = 12'h000;
 
+  
   // internal wires
 
-  wire           end_of_period;  
+  wire          end_of_period;  
 
 
 // generate a signal named end_of_period witch has '1' logic value at the end of the signal period
 
-  assign end_of_period = (/*condition here*/) ? 1'b1 : 1'b0;
+  assign end_of_period = (pulse_period_cnt == PULSE_PERIOD) ? 1'b1 : 1'b0;
 
 // Create a counter from 0 to PULSE_PERIOD
 
   always @(posedge pwm_clk) begin
-   
+    if (end_of_period) begin
+      pulse_period_cnt <= 12'd1;
+    end else begin
+      pulse_period_cnt <= pulse_period_cnt + 12'h1;
+    end
   end
-
+  
 // control the pwm signal value based on the input signal and counter value
 
   always @(posedge pwm_clk) begin
-    
-  end  
+    pwm_led_0_reg <= (data_channel_0_reg > pulse_period_cnt) ? 1'b1 : 1'b0;
+    pwm_led_1_reg <= (data_channel_1_reg > pulse_period_cnt) ? 1'b1 : 1'b0;
+    pwm_led_2_reg <= (data_channel_2_reg > pulse_period_cnt) ? 1'b1 : 1'b0;
+    pwm_led_3_reg <= (data_channel_3_reg > pulse_period_cnt) ? 1'b1 : 1'b0;
+  end
+  
+// assign the output signal to the internal register
+
+  assign pwm_led_0 = pwm_led_0_reg;
+  assign pwm_led_1 = pwm_led_1_reg;
+  assign pwm_led_2 = pwm_led_2_reg;
+  assign pwm_led_3 = pwm_led_3_reg;
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
   always @(posedge pwm_clk) begin
   
     if (end_of_period) begin
-  
+      data_channel_0_reg <= data_channel_0;
+      data_channel_1_reg <= data_channel_1;
+      data_channel_2_reg <= data_channel_2;
+      data_channel_3_reg <= data_channel_3;
     end else begin
-  
+      data_channel_0_reg <= data_channel_0_reg;
+      data_channel_1_reg <= data_channel_1_reg;
+      data_channel_2_reg <= data_channel_2_reg;
+      data_channel_3_reg <= data_channel_3_reg;
     end 
   end
 
