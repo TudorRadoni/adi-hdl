@@ -42,5 +42,39 @@ module verilog_task_testbench (
   input            rstn,
   output   [11:0]  triangle_wave
 );
-
+reg [11:0] counter = 0;
+parameter val_max = 4095;
+   reg updown = 1'b1; // 1 = going up, 0 = going down
+	
+	//create a triangle wave centered at zero that has a period of ~5 seconds (assuming a 100MHz input clock)
+   always @(posedge(ref_clk)) begin
+      if (!rstn) 
+      begin
+         counter <= 0;
+         end
+      else  if (updown == 1)
+         begin
+                  if (counter == val_max) 
+               begin
+                  updown <= 0;
+                end 
+                else
+                  begin
+                  counter <= counter + 1;
+                  end
+                end
+            else 
+              begin
+               if (counter == 0) begin
+                  updown <= 1;
+                 end
+                 else
+                   begin
+                  counter <= counter - 1;
+               
+               end
+            end
+            
+         end
+   assign triangle_wave = counter;
 endmodule
