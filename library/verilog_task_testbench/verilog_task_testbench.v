@@ -37,10 +37,38 @@
 `timescale 1ns/100ps
 
 module verilog_task_testbench ( 
-
   input            ref_clk,
   input            rstn,
-  output   [11:0]  triangle_wave
+  output   reg [11:0]  triangle_wave
 );
 
+  reg [11:0] counter; 
+  reg count_direction;
+
+  parameter NUM_STEPS = 4095;
+
+  always @(posedge ref_clk)begin
+    if(!rstn) begin // reset active low set machine to start point
+      counter <= 0;
+      count_direction <= 0;
+    end else if (count_direction == 0) begin // count up
+      if(counter == NUM_STEPS) begin // was counting up and got to upper bound
+        count_direction <= 1; // switch direction
+      end else begin
+        counter <= counter + 1;
+      end 
+    end else begin
+      if (counter == 0) begin // was counting down and got to lower bound
+        count_direction <= 0;
+      end else begin
+        counter <= counter - 1;
+      end
+    end
+
+    triangle_wave <= counter;
+  end
+
 endmodule
+
+
+
