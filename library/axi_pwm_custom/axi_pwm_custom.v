@@ -37,14 +37,17 @@
 
 module axi_pwm_custom #(
   parameter       ID = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0
 ) (
   
 // 1.Create the pwm output signals 
-
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
+  output                  pwm_led_0,
+  output                  pwm_led_1,
+  output                  pwm_led_2,
+  output                  pwm_led_3,
 
   // axi interface
 
@@ -179,10 +182,10 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 0 
+    .adc_data_channel (data_channel_0),  // Connect the samples data for CHANNEL 0 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
-    .up_adc_pn_oos (),
+    .up_adc_pn_oos (),  
     .up_adc_or (),
     .up_usr_datatype_be (),
     .up_usr_datatype_signed (),
@@ -233,7 +236,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 1 
+    .adc_data_channel (data_channel_1),  // Connect the samples data for CHANNEL 1 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -287,7 +290,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 2 
+    .adc_data_channel (data_channel_2),  // Connect the samples data for CHANNEL 2 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -341,7 +344,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 3 
+    .adc_data_channel (data_channel_3),  // Connect the samples data for CHANNEL 3 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -372,5 +375,18 @@ module axi_pwm_custom #(
     .up_rack  ( up_rack_s[3])); 
 
   // Add the interface module here and connect it to the samples data and output ports
+
+  axi_pwm_custom_if  axi_pwm_custom_if_inst (
+    .pwm_clk(pwm_clk),
+    .rstn(up_rstn),
+    .data_channel_0(data_channel_0),
+    .data_channel_1(data_channel_1),
+    .data_channel_2(data_channel_2),
+    .data_channel_3(data_channel_3),
+    .pwm_led_0(pwm_led_0),
+    .pwm_led_1(pwm_led_1),
+    .pwm_led_2(pwm_led_2),
+    .pwm_led_3(pwm_led_3)
+  );
 
 endmodule
