@@ -43,4 +43,34 @@ module verilog_task_testbench (
   output   [11:0]  triangle_wave
 );
 
+  reg [11:0] triangle_wave_internal; 
+  reg count_up;
+
+  initial begin
+    triangle_wave_internal = 12'h000;
+    count_up = 1;
+  end
+
+  always @(posedge ref_clk) begin
+    if (!rstn) begin
+      triangle_wave_internal = 12'h000;
+      count_up = 1;
+    end 
+    
+    if (count_up) begin
+      triangle_wave_internal = triangle_wave_internal + 1'b1;
+    end else begin
+      triangle_wave_internal = triangle_wave_internal - 1'b1;
+    end
+
+    if (&triangle_wave_internal)
+      count_up = 0;
+    else if (!(|triangle_wave_internal))
+      count_up = 1;
+
+    
+  end
+
+  assign triangle_wave = triangle_wave_internal;
+
 endmodule
