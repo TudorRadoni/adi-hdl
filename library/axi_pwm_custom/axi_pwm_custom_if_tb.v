@@ -48,7 +48,7 @@ module axi_pwm_custom_if_tb;
   reg   [11:0]  data_channel_2   = 12'b0;
   reg   [11:0]  data_channel_3   = 12'b0;
   reg   [11:0]  pulse_period_cnt = 12'h0;
-  reg   [11:0]  pulse_period_d   = 12'd4096;
+  reg   [11:0]  pulse_period_d   = 12'd2048;
 
   wire          end_of_period;  
   wire          pwm_led_0; 
