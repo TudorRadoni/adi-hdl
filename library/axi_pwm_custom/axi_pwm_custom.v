@@ -1,50 +1,19 @@
-// ***************************************************************************
-// ***************************************************************************
-// Copyright 2014 - 2019 (c) Analog Devices, Inc. All rights reserved.
-//
-// In this HDL repository, there are many different and unique modules, consisting
-// of various HDL (Verilog or VHDL) components. The individual modules are
-// developed independently, and may be accompanied by separate and unique license
-// terms.
-//
-// The user should read each of these license terms, and understand the
-// freedoms and responsibilities that he or she has by using this source/core.
-//
-// This core is distributed in the hope that it will be useful, but WITHOUT ANY
-// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-// A PARTICULAR PURPOSE.
-//
-// Redistribution and use of source or resulting binaries, with or without modification
-// of this file, are permitted under one of the following two license terms:
-//
-//   1. The GNU General Public License version 2 as published by the
-//      Free Software Foundation, which can be found in the top level directory
-//      of this repository (LICENSE_GPL2), and also online at:
-//      <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
-//
-// OR
-//
-//   2. An ADI specific BSD license, which can be found in the top level directory
-//      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
-//      This will allow to generate bit files and not release the source code,
-//      as long as it attaches to an ADI device.
-//
-// ***************************************************************************
-// ***************************************************************************
-
 `timescale 1ns/100ps
 
 module axi_pwm_custom #(
   parameter       ID = 0,
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0
 ) (
   
 // 1.Create the pwm output signals 
 
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
+  output pwm_led_0,
+  output pwm_led_1,
+  output pwm_led_2,
+  output pwm_led_3,
 
   // axi interface
 
@@ -179,7 +148,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 0 
+    .adc_data_channel (data_channel_0),  // Connect the samples data for CHANNEL 0 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -233,7 +202,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 1 
+    .adc_data_channel (data_channel_1),  // Connect the samples data for CHANNEL 1 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -287,7 +256,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 2 
+    .adc_data_channel (data_channel_2),  // Connect the samples data for CHANNEL 2 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -341,7 +310,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 3 
+    .adc_data_channel (data_channel_3),  // Connect the samples data for CHANNEL 3 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -373,4 +342,16 @@ module axi_pwm_custom #(
 
   // Add the interface module here and connect it to the samples data and output ports
 
+    axi_pwm_custom_if  axi_pwm_custom_if_inst (
+      .pwm_clk(pwm_clk),
+      .rstn(up_rstn),
+      .data_channel_0(data_channel_0),
+      .data_channel_1(data_channel_1),
+      .data_channel_2(data_channel_2),
+      .data_channel_3(data_channel_3),
+      .pwm_led_0(pwm_led_0),
+      .pwm_led_1(pwm_led_1),
+      .pwm_led_2(pwm_led_2),
+      .pwm_led_3(pwm_led_3)
+    );
 endmodule
