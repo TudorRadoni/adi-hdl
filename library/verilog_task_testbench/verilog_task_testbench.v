@@ -43,4 +43,30 @@ module verilog_task_testbench (
   output   [11:0]  triangle_wave
 );
 
+  reg temp_wave = 12'h0;
+  reg updown = 1'b0;
+
+  always @(posedge ref_clk) begin
+    if (!rstn) begin
+      temp_wave = 12'h0;
+    end
+    else if (updown == 1'b0) begin
+      if (temp_wave == 12'hFFF) begin
+        updown = 1'b1;
+      end
+      else begin
+        temp_wave <= temp_wave + 1;
+      end
+    end
+    else begin
+      if (temp_wave == 12'h000) begin
+        updown = 1'b0;
+      end
+      else begin
+        temp_wave <= temp_wave - 1;
+      end
+    end
+  end
+
+  assign triangle_wave = temp_wave;
 endmodule
