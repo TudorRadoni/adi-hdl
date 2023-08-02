@@ -392,14 +392,14 @@ up_axi i_up_axi (
       .pwm_led_2(pwm_led_2),
       .pwm_led_3 (pwm_led_3));
 
-    // my_ila i_ila (
-    //   .clk(adc_clk),
-    //   .probe0(data_channel_0),
-    //   .probe1(data_channel_1),
-    //   .probe2(data_channel_2),
-    //   .probe3(data_channel_3),
-    //   .probe4(pwm_led_0),
-    //   .probe5(pwm_led_1),
-    //   .probe6(pwm_led_2),
-    //   .probe7(pwm_led_3));
+    my_ila i_ila (
+      .clk(adc_clk),
+      .probe0(data_channel_0),
+      .probe1(data_channel_1),
+      .probe2(data_channel_2),
+      .probe3(data_channel_3),
+      .probe4(pwm_led_0),
+      .probe5(pwm_led_1),
+      .probe6(pwm_led_2),
+      .probe7(pwm_led_3));
 endmodule
