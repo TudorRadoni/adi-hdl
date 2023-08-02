@@ -36,15 +36,15 @@
 `timescale 1ns/100ps
 
 module axi_pwm_custom #(
-  parameter       ID = 0,
+  parameter       ID = 0
 ) (
   
-// 1.Create the pwm output signals 
+  // 1.Create the pwm output signals 
 
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
+  output                  pwm_led_0,
+  output                  pwm_led_1,
+  output                  pwm_led_2,
+  output                  pwm_led_3,
 
   // axi interface
 
@@ -179,7 +179,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 0 
+    .adc_data_channel (data_channel_0),  // Connect the samples data for CHANNEL 0 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -207,7 +207,7 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[0]),
-    .up_rack  ( up_rack_s[0])); 
+    .up_rack  (up_rack_s[0])); 
 
   up_adc_channel #(
     .CHANNEL_ID(1)
@@ -233,7 +233,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 1 
+    .adc_data_channel (data_channel_1),  // Connect the samples data for CHANNEL 1 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -261,7 +261,7 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[1]),
-    .up_rack  ( up_rack_s[1])); 
+    .up_rack  (up_rack_s[1])); 
 
   up_adc_channel #(
     .CHANNEL_ID(2)
@@ -287,7 +287,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 2 
+    .adc_data_channel (data_channel_2),  // Connect the samples data for CHANNEL 2 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -315,7 +315,7 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[2]),
-    .up_rack  ( up_rack_s[2])); 
+    .up_rack  (up_rack_s[2])); 
 
   up_adc_channel #(
     .CHANNEL_ID(3)
@@ -341,7 +341,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 3 
+    .adc_data_channel (data_channel_3),  // Connect the samples data for CHANNEL 3 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -369,8 +369,19 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[3]),
-    .up_rack  ( up_rack_s[3])); 
+    .up_rack  (up_rack_s[3])); 
 
   // Add the interface module here and connect it to the samples data and output ports
-
+  axi_pwm_custom_if  axi_pwm_custom_if_inst (
+    .pwm_clk(pwm_clk),
+    .rstn(rstn),
+    .data_channel_0(data_channel_0),
+    .data_channel_1(data_channel_1),
+    .data_channel_2(data_channel_2),
+    .data_channel_3(data_channel_3),
+    .pwm_led_0(pwm_led_0),
+    .pwm_led_1(pwm_led_1),
+    .pwm_led_2(pwm_led_2),
+    .pwm_led_3(pwm_led_3)
+  );
 endmodule

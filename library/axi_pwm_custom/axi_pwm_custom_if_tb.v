@@ -87,7 +87,7 @@ module axi_pwm_custom_if_tb;
     end
   end
 
-  assign end_of_period =(pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
+  assign end_of_period = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
 
   always @(posedge pwm_clk) begin
     if(end_of_period == 1'b1) begin
@@ -109,6 +109,7 @@ module axi_pwm_custom_if_tb;
     .pwm_led_0(pwm_led_0),
     .pwm_led_1(pwm_led_1),
     .pwm_led_2(pwm_led_2),
-    .pwm_led_3 (pwm_led_3));
+    .pwm_led_3(pwm_led_3)
+  );
 
 endmodule

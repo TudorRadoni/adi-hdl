@@ -54,37 +54,92 @@ module axi_pwm_custom_if (
 
   // internal registers
 
+  reg [11:0] pulse_period_cnt = 12'h000;
+  reg [11:0] temp_data_0, temp_data_1, temp_data_2, temp_data_3;
+  reg updown = 1'b0;
+  reg pwm_led_0_reg, pwm_led_1_reg, pwm_led_2_reg, pwm_led_3_reg;
 
   // internal wires
 
   wire           end_of_period;  
 
+  //pwm threshold == output from the ADC
 
 // generate a signal named end_of_period witch has '1' logic value at the end of the signal period
 
-  assign end_of_period = (/*condition here*/) ? 1'b1 : 1'b0;
+  assign end_of_period = (pulse_period_cnt == PULSE_PERIOD) ? 1'b1 : 1'b0;
 
 // Create a counter from 0 to PULSE_PERIOD
 
   always @(posedge pwm_clk) begin
-   
+    if (end_of_period) begin
+      pulse_period_cnt <= 12'h000;
+    end
+    else if (!updown) begin
+      if (pulse_period_cnt == PULSE_PERIOD) begin
+        updown = 1'b1;
+      end
+      else begin
+        pulse_period_cnt <= pulse_period_cnt + 1;
+      end
+    end
+    else begin
+      if (pulse_period_cnt == 12'h000) begin
+        updown = 1'b0;
+      end
+      else begin
+        pulse_period_cnt <= pulse_period_cnt - 1;
+      end
+    end
   end
 
 // control the pwm signal value based on the input signal and counter value
 
   always @(posedge pwm_clk) begin
-    
+    // channel 0
+    if (pulse_period_cnt <= temp_data_0) begin
+      pwm_led_0_reg <= 1'b1;
+    end
+    else begin
+      pwm_led_0_reg <= 1'b0;
+    end
+    // channel 1
+    if (pulse_period_cnt <= temp_data_1) begin
+      pwm_led_1_reg <= 1'b1;
+    end
+    else begin
+      pwm_led_1_reg <= 1'b0;
+    end
+    // channel 2
+    if (pulse_period_cnt <= temp_data_2) begin
+      pwm_led_2_reg <= 1'b1;
+    end
+    else begin
+      pwm_led_2_reg <= 1'b0;
+    end
+    // channel 3
+    if (pulse_period_cnt <= temp_data_3) begin
+      pwm_led_3_reg <= 1'b1;
+    end
+    else begin
+      pwm_led_3_reg <= 1'b0;
+    end
   end  
-
+  
 // make sure that the new data is processed only after the END_OF_PERIOD
 
   always @(posedge pwm_clk) begin
-  
-    if (end_of_period) begin
-  
-    end else begin
-  
-    end 
+    if (end_of_period == 1'b1) begin
+      temp_data_0 <= data_channel_0;
+      temp_data_1 <= data_channel_1;
+      temp_data_2 <= data_channel_2;
+      temp_data_3 <= data_channel_3;
+    end
   end
+
+  assign pwm_led_0 = pwm_led_0_reg;
+  assign pwm_led_1 = pwm_led_1_reg;
+  assign pwm_led_2 = pwm_led_2_reg;
+  assign pwm_led_3 = pwm_led_3_reg;
 
 endmodule
