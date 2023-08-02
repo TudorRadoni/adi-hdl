@@ -135,7 +135,7 @@ module axi_pwm_custom #(
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),
-    .up_axi_awaddr (s_axi_awaddr),
+    .up_axi_awaddr (s_axi_awad in up dr),
     .up_axi_awready (s_axi_awready),
     .up_axi_wvalid (s_axi_wvalid),
     .up_axi_wdata (s_axi_wdata),
@@ -392,6 +392,17 @@ axi_pwm_custom_if  axi_pwm_custom_if_inst (
     .pwm_led_2 (pwm_led_2),
     .pwm_led_3 (pwm_led_3)
   );
+
+  my_ila i_ila (
+    .clk(adc_clk),
+    .probe0(),
+    .probe1(),
+    .probe2(),
+    .probe3(),
+    .probe4(),
+    .probe5(),
+    .probe6(),
+    .probe7());
 
 
 endmodule
