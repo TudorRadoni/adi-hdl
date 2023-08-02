@@ -389,4 +389,16 @@ module axi_pwm_custom #(
     .pwm_led_2(pwm_led_2),
     .pwm_led_3(pwm_led_3));
 
+    my_ila i_ila (
+      .clk(adc_clk),
+      .probe0(),
+      .probe1(),
+      .probe2(),
+      .probe3(),
+      .probe4(),
+      .probe5(),
+      .probe6(),
+      .probe7());
+
+
 endmodule
