@@ -54,37 +54,74 @@ module axi_pwm_custom_if (
 
   // internal registers
 
+  reg      [11:0]  counter = 12'b0;
+  reg      [11:0]  next_data_channel_0 = 12'b0;
+  reg      [11:0]  next_data_channel_1 = 12'b0;
+  reg      [11:0]  next_data_channel_2 = 12'b0;
+  reg      [11:0]  next_data_channel_3 = 12'b0;
 
   // internal wires
 
   wire           end_of_period;  
 
-
 // generate a signal named end_of_period witch has '1' logic value at the end of the signal period
 
-  assign end_of_period = (/*condition here*/) ? 1'b1 : 1'b0;
+  assign end_of_period = (counter == PULSE_PERIOD) ? 1'b1 : 1'b0;
 
 // Create a counter from 0 to PULSE_PERIOD
 
   always @(posedge pwm_clk) begin
+
+    if (end_of_period || !rstn) begin
+      counter <= 12'b0;
+    end else begin
+      counter <= counter + 1'b1;
+    end
    
   end
 
 // control the pwm signal value based on the input signal and counter value
 
-  always @(posedge pwm_clk) begin
-    
-  end  
+  assign pwm_led_0 = (counter <= next_data_channel_0) ? 1'b1 : 1'b0;
+  assign pwm_led_1 = (counter <= next_data_channel_1) ? 1'b1 : 1'b0;
+  assign pwm_led_2 = (counter <= next_data_channel_2) ? 1'b1 : 1'b0;
+  assign pwm_led_3 = (counter <= next_data_channel_3) ? 1'b1 : 1'b0;
+
+  
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
   always @(posedge pwm_clk) begin
   
-    if (end_of_period) begin
+    if (end_of_period || !rstn) begin
+
+      next_data_channel_0 <= data_channel_0;
+      next_data_channel_1 <= data_channel_1;
+      next_data_channel_2 <= data_channel_2;
+      next_data_channel_3 <= data_channel_3;
   
     end else begin
+
+      next_data_channel_0 <= next_data_channel_0;
+      next_data_channel_1 <= next_data_channel_1;
+      next_data_channel_2 <= next_data_channel_2;
+      next_data_channel_3 <= next_data_channel_3;
   
     end 
+
   end
+
+  // always @(posedge pwm_clk) begin
+
+  //   if (!rstn) begin
+
+  //     next_data_channel_0 <= data_channel_0;
+  //     next_data_channel_1 <= data_channel_1;
+  //     next_data_channel_2 <= data_channel_2;
+  //     next_data_channel_3 <= data_channel_3;
+    
+  //   end
+
+  // end  
 
 endmodule
