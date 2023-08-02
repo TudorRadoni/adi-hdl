@@ -75,10 +75,10 @@ module axi_pwm_custom_if_tb;
       data_channel_2 <= 12'b0;
       data_channel_3 <= 12'b0;
     end else if(end_of_period == 1'b1) begin 
-      data_channel_0 <= data_channel_0 + 12'h1;
-      data_channel_1 <= data_channel_1 + 12'h1;
-      data_channel_2 <= data_channel_2 + 12'h1;
-      data_channel_3 <= data_channel_3 + 12'h1;  
+      data_channel_0 <= data_channel_0 + 12'hf;
+      data_channel_1 <= data_channel_1 + 12'hf;
+      data_channel_2 <= data_channel_2 + 12'hf;
+      data_channel_3 <= data_channel_3 + 12'hf;  
     end else begin
       data_channel_0 <= data_channel_0;
       data_channel_1 <= data_channel_1;
