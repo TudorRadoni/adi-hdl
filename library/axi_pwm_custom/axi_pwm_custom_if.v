@@ -36,55 +36,100 @@
 
 `timescale 1ns/100ps
 
-module axi_pwm_custom_if ( 
+module axi_pwm_custom_if #(
 
-  input            pwm_clk,
-  input            rstn,
-  input    [11:0]  data_channel_0,
-  input    [11:0]  data_channel_1,
-  input    [11:0]  data_channel_2,
-  input    [11:0]  data_channel_3,
-  output           pwm_led_0,
-  output           pwm_led_1,
-  output           pwm_led_2,
-  output           pwm_led_3
+  // the width and period are defined in number of clock cycles
+  parameter   PULSE_PERIOD = 4095
+) ( 
+
+  // physical interface
+
+input            pwm_clk,
+input            rstn,
+input    [11:0]  data_channel_0,
+input    [11:0]  data_channel_1,
+input    [11:0]  data_channel_2,
+input    [11:0]  data_channel_3,
+output           pwm_led_0,
+output           pwm_led_1,
+output           pwm_led_2,
+output           pwm_led_3
 );
 
-  localparam PULSE_PERIOD = 4095;
+// internal registers
 
-  // internal registers
+reg     [11:0]  pulse_period_cnt = 12'h0;
+reg             phase_align_armed = 1'b1;
+reg     [11:0]  pulse_period_d = PULSE_PERIOD;
+reg     [11:0]  data_channel_0_d = 12'b0;
+reg     [11:0]  data_channel_1_d = 12'b0;
+reg     [11:0]  data_channel_2_d = 12'b0;
+reg     [11:0]  data_channel_3_d = 12'b0;  
+reg             pwm_led_0_s = 1'b0;
+reg             pwm_led_1_s = 1'b0;
+reg             pwm_led_2_s = 1'b0;
+reg             pwm_led_3_s = 1'b0;
+
+// internal wires
+
+wire           end_of_period;  
+assign pwm_led_0 = pwm_led_0_s; 
+assign pwm_led_1 = pwm_led_1_s;
+assign pwm_led_2 = pwm_led_2_s;
+assign pwm_led_3 = pwm_led_3_s;
 
 
-  // internal wires
+// Counter
 
-  wire           end_of_period;  
+always @(posedge pwm_clk) begin
+  if (rstn == 1'b0 || end_of_period == 1'b1) begin
+    pulse_period_cnt <= 12'd1;
+  end else begin
+    pulse_period_cnt <= pulse_period_cnt + 1'b1;
 
-
-// generate a signal named end_of_period witch has '1' logic value at the end of the signal period
-
-  assign end_of_period = (/*condition here*/) ? 1'b1 : 1'b0;
-
-// Create a counter from 0 to PULSE_PERIOD
-
-  always @(posedge pwm_clk) begin
-   
   end
+end
 
-// control the pwm signal value based on the input signal and counter value
+assign end_of_period = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
 
-  always @(posedge pwm_clk) begin
-    
-  end  
+// PWM Generator
 
-// make sure that the new data is processed only after the END_OF_PERIOD
+always @(posedge pwm_clk) begin
 
-  always @(posedge pwm_clk) begin
-  
-    if (end_of_period) begin
-  
-    end else begin
-  
-    end 
-  end
+  if (data_channel_0 > pulse_period_cnt)
+    pwm_led_0_s <= 1'b1;
+  else  
+    pwm_led_0_s <= 1'b0;  
+  if (data_channel_1 > pulse_period_cnt)
+    pwm_led_1_s <= 1'b1;
+  else  
+    pwm_led_1_s <= 1'b0;
+  if (data_channel_2 > pulse_period_cnt)
+    pwm_led_2_s <= 1'b1;
+  else  
+    pwm_led_2_s <= 1'b0;
+  if (data_channel_3 > pulse_period_cnt)
+    pwm_led_3_s <= 1'b1;
+  else  
+    pwm_led_3_s <= 1'b0;        
 
+end  
+
+always @(posedge pwm_clk) begin
+
+
+  if (end_of_period) begin
+    data_channel_0_d <= data_channel_0;
+    data_channel_1_d <= data_channel_1;
+    data_channel_2_d <= data_channel_2;
+    data_channel_3_d <= data_channel_3;
+  end else begin
+    data_channel_0_d <= data_channel_0_d;
+    data_channel_1_d <= data_channel_1_d;
+    data_channel_2_d <= data_channel_2_d;
+    data_channel_3_d <= data_channel_3_d;
+  end 
+
+
+end
 endmodule
