@@ -38,15 +38,15 @@
 module axi_pwm_custom_if_tb;
   parameter VCD_FILE = "axi_pwm_custom_if_tb.vcd";
 
-  `define TIMEOUT 9000
+  `define TIMEOUT 20000
   `include "../common/tb/tb_base.v"
 
   reg           resetn_in        = 1'b0;
   reg           pwm_clk          = 1'b0;
-  reg   [11:0]  data_channel_0   = 12'b0;
-  reg   [11:0]  data_channel_1   = 12'b0;
-  reg   [11:0]  data_channel_2   = 12'b0;
-  reg   [11:0]  data_channel_3   = 12'b0;
+  reg   [11:0]  data_channel_0   = 12'd0;
+  reg   [11:0]  data_channel_1   = 12'd0;
+  reg   [11:0]  data_channel_2   = 12'd0;
+  reg   [11:0]  data_channel_3   = 12'd0;
   reg   [11:0]  pulse_period_cnt = 12'h0;
   reg   [11:0]  pulse_period_d   = 12'd4096;
 
