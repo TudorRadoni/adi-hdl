@@ -1,38 +1,3 @@
-// ***************************************************************************
-// ***************************************************************************
-// Copyright 2019 - 2023 (c) Analog Devices, Inc. All rights reserved.
-//
-// In this HDL repository, there are many different and unique modules, consisting
-// of various HDL (Verilog or VHDL) components. The individual modules are
-// developed independently, and may be accompanied by separate and unique license
-// terms.
-//
-// The user should read each of these license terms, and understand the
-// freedoms and responsibilities that he or she has by using this source/core.
-//
-// This core is distributed in the hope that it will be useful, but WITHOUT ANY
-// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-// A PARTICULAR PURPOSE.
-//
-// Redistribution and use of source or resulting binaries, with or without modification
-// of this file, are permitted under one of the following two license terms:
-//
-//   1. The GNU General Public License version 2 as published by the
-//      Free Software Foundation, which can be found in the top level directory
-//      of this repository (LICENSE_GPL2), and also online at:
-//      <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
-//
-// OR
-//
-//   2. An ADI specific BSD license, which can be found in the top level directory
-//      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
-//      This will allow to generate bit files and not release the source code,
-//      as long as it attaches to an ADI device.
-//
-// ***************************************************************************
-// ***************************************************************************
-
 `timescale 1ns/100ps
 
 module system_top (
@@ -65,15 +30,21 @@ module system_top (
 
 // 4. Add SPI ports for both ADC PMOD connector and sniffing PMOD connector 
 
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
+  // SPI ports for the ADC PMOD connector
+  output adc_spi_clk,
+  output adc_spi_cs,
+  input adc_spi_miso,
+  output adc_spi_mosi,
+
+  // SPI ports for the sniffing PMOD connector
+  output sniff_spi_clk,
+  output sniff_spi_cs,
+  output sniff_spi_miso,
+  output sniff_spi_mosi
   
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/  
+
+  //aici pune miso,mosi,cs,...
+  //important de tinut cont de directie
 );
 
   // internal signals
@@ -88,6 +59,12 @@ module system_top (
   /*here*/
   /*here*/
   /*here*/ 
+  //declaram pwm_led0... ca wires cu latime de 1 bit
+  wire          pwm_led_0; 
+  wire          pwm_led_1;
+  wire          pwm_led_2; 
+  wire          pwm_led_3; 
+
 
  ad_iobuf #(
     .DATA_WIDTH (4)
@@ -102,7 +79,9 @@ module system_top (
   ) i_iobuf_leds (
     .dio_t (4'h0),
 // 2. Connect the PWM wires to the input port of the ad_iobuf
-    .dio_i ({/*here*/, /*here*/, /*here*/, /*here*/}),
+    //dio_i controleaza ledurile care sunt deja legate
+    //.dio_i ({/*here*/, /*here*/, /*here*/, /*here*/}),
+    .dio_i ({pwm_led_3, pwm_led_2, pwm_led_1, pwm_led_0}),
     .dio_o (gpio_i[7:4]),
     .dio_p (led));
 
@@ -115,6 +94,12 @@ module system_top (
   /*here*/
   /*here*/
   /*here*/
+  assign sniff_spi_clk = adc_spi_clk;  /*here*/
+  assign sniff_spi_miso = adc_spi_miso;/*here*/
+  assign sniff_spi_mosi = adc_spi_mosi;/*here*/
+  assign sniff_spi_cs = adc_spi_cs;    /*here*/
+
+
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -141,14 +126,14 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .spi0_clk_i (),
-    .spi0_clk_o (/*here*/),   // 5. Connect here the SPI CLK
-    .spi0_csn_0_o (/*here*/), // 5. Connect here the SPI CS
+    .spi0_clk_o (adc_spi_clk),   // 5. Connect here the SPI CLK
+    .spi0_csn_0_o (adc_spi_cs), // 5. Connect here the SPI CS
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (/*here*/),   // 5. Connect here the SPI MISO
+    .spi0_sdi_i (adc_spi_miso),   // 5. Connect here the SPI MISO
     .spi0_sdo_i (),
-    .spi0_sdo_o (/*here*/),   // 5. Connect here the SPI MOSI
+    .spi0_sdo_o (adc_spi_mosi),   // 5. Connect here the SPI MOSI
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -162,6 +147,11 @@ module system_top (
     /*here*/
     /*here*/
     /*here*/
-    /*here*/);
+    /*here*/
+    //.pwm_led0...
+    .pwm_led_0 (pwm_led_0),
+    .pwm_led_1 (pwm_led_1),
+    .pwm_led_2 (pwm_led_2),
+    .pwm_led_3 (pwm_led_3));
 
 endmodule
