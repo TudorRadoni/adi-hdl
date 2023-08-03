@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="work.axi_pwm_custom_if_tb.wdb" id="1">
+         <top_modules>
+            <top_module name="axi_pwm_custom_if_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="448.0620 us"></ZoomStartTime>
+      <ZoomEndTime time="512.8621 us"></ZoomEndTime>
+      <Cursor1Time time="502.0620 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="296"></NameColumnWidth>
+      <ValueColumnWidth column_width="146"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="19" />
+   <wvobject fp_name="/axi_pwm_custom_if_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/reset_shift" type="array">
+      <obj_property name="ElementShortName">reset_shift[3:0]</obj_property>
+      <obj_property name="ObjectShortName">reset_shift[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/trigger_reset" type="logic">
+      <obj_property name="ElementShortName">trigger_reset</obj_property>
+      <obj_property name="ObjectShortName">trigger_reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/failed" type="logic">
+      <obj_property name="ElementShortName">failed</obj_property>
+      <obj_property name="ObjectShortName">failed</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/resetn_in" type="logic">
+      <obj_property name="ElementShortName">resetn_in</obj_property>
+      <obj_property name="ObjectShortName">resetn_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/pwm_clk" type="logic">
+      <obj_property name="ElementShortName">pwm_clk</obj_property>
+      <obj_property name="ObjectShortName">pwm_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/data_channel_0" type="array">
+      <obj_property name="ElementShortName">data_channel_0[11:0]</obj_property>
+      <obj_property name="ObjectShortName">data_channel_0[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/data_channel_1" type="array">
+      <obj_property name="ElementShortName">data_channel_1[11:0]</obj_property>
+      <obj_property name="ObjectShortName">data_channel_1[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/data_channel_2" type="array">
+      <obj_property name="ElementShortName">data_channel_2[11:0]</obj_property>
+      <obj_property name="ObjectShortName">data_channel_2[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/data_channel_3" type="array">
+      <obj_property name="ElementShortName">data_channel_3[11:0]</obj_property>
+      <obj_property name="ObjectShortName">data_channel_3[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/pulse_period_cnt" type="array">
+      <obj_property name="ElementShortName">pulse_period_cnt[11:0]</obj_property>
+      <obj_property name="ObjectShortName">pulse_period_cnt[11:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/pulse_period_d" type="array">
+      <obj_property name="ElementShortName">pulse_period_d[11:0]</obj_property>
+      <obj_property name="ObjectShortName">pulse_period_d[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/end_of_period" type="logic">
+      <obj_property name="ElementShortName">end_of_period</obj_property>
+      <obj_property name="ObjectShortName">end_of_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/pwm_led_0" type="logic">
+      <obj_property name="ElementShortName">pwm_led_0</obj_property>
+      <obj_property name="ObjectShortName">pwm_led_0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/pwm_led_1" type="logic">
+      <obj_property name="ElementShortName">pwm_led_1</obj_property>
+      <obj_property name="ObjectShortName">pwm_led_1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/pwm_led_2" type="logic">
+      <obj_property name="ElementShortName">pwm_led_2</obj_property>
+      <obj_property name="ObjectShortName">pwm_led_2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/pwm_led_3" type="logic">
+      <obj_property name="ElementShortName">pwm_led_3</obj_property>
+      <obj_property name="ObjectShortName">pwm_led_3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/axi_pwm_custom_if_tb/VCD_FILE" type="array">
+      <obj_property name="ElementShortName">VCD_FILE[191:0]</obj_property>
+      <obj_property name="ObjectShortName">VCD_FILE[191:0]</obj_property>
+   </wvobject>
+</wave_config>
