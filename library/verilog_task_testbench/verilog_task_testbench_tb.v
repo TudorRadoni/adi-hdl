@@ -32,12 +32,19 @@
 //
 // ***************************************************************************
 // ***************************************************************************
-
 `timescale 1ns/100ps
-
 module verilog_task_testbench_tb;
   parameter VCD_FILE = "verilog_task_testbench_tb.vcd";
-
   `define TIMEOUT 900
-
+  wire [11:0] triangle_wave;
+  reg pwm_clk = 1'b0;
+  reg resetn_in = 1'b0;
+  always #1 pwm_clk = !pwm_clk;
+  initial begin
+    #1000 resetn_in = 1'b1;
+  end
+  verilog_task_testbench  verilog_task_testbench_inst (
+    .ref_clk(pwm_clk),
+    .rstn(resetn_in),
+    .triangle_wave(triangle_wave));
 endmodule
