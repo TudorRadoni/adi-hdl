@@ -376,5 +376,15 @@ module axi_pwm_custom #(
     .up_rack  ( up_rack_s[3])); 
 
   // Add the interface module here and connect it to the samples data and output ports
+    my_ila i_ila (
+      .clk(adc_clk),
+      .probe0(),
+      .probe1(),
+      .probe2(),
+      .probe3(),
+      .probe4(),
+      .probe5(),
+      .probe6(),
+      .probe7());
 
 endmodule
