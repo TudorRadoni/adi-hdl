@@ -36,11 +36,41 @@
 
 `timescale 1ns/100ps
 
-module verilog_task_testbench ( 
-
+module verilog_task_testbench (
   input            ref_clk,
   input            rstn,
   output   [11:0]  triangle_wave
 );
+  
+reg [11:0] triangle_wave_reg;
+integer decrement = 0;
+
+initial begin
+  triangle_wave_reg = 0;
+end
+
+always @(posedge ref_clk) begin
+  if (rstn == 1'b0) begin
+    triangle_wave_reg <= 0;
+  end else begin
+    // if decrement = 1, then decrement the triangle wave until it reaches 0
+    if (decrement == 1) begin
+      if (triangle_wave_reg == 0) begin
+        decrement = 0;
+      end else begin
+        triangle_wave_reg <= triangle_wave_reg - 1;
+      end
+    end else begin
+      // if decrement = 0, then increment the triangle wave until it reaches 4095
+      if (triangle_wave_reg == 4095) begin
+        decrement = 1;
+      end else begin
+        triangle_wave_reg <= triangle_wave_reg + 1;
+      end
+    end
+  end
+end
+
+assign triangle_wave = triangle_wave_reg;
 
 endmodule
